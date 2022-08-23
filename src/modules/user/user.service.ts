@@ -43,13 +43,22 @@ export class UserService {
   }
 
   async update(user: UpdateUserDto, id: string) {
-    const { name, email, username, password } = user;
+    const { oldUsername, oldPassword, name, email, username, password } = user;
 
     const userIdResult = await this.userModel.findById(id);
     
     if (!userIdResult) {
       throw new HttpException(
         { message: 'Usuário não encontrado' },
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    const checkLoginResult = await this.userModel.findOne({ username: oldUsername, password: md5(oldPassword) });
+
+    if (!checkLoginResult) {
+      throw new HttpException(
+        { message: 'Usuário ou senha inválidos' },
         HttpStatus.BAD_REQUEST
       );
     }
