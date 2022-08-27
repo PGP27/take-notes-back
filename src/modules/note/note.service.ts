@@ -5,13 +5,20 @@ import { Model } from 'mongoose';
 import { Note, NoteDocument } from './note.entity';
 import { UpdateNoteDto } from './dto/UpdateNoteDto';
 import { User, UserDocument } from '../user/user.entity';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class NoteService {
   constructor(
     @InjectModel(Note.name) private noteModel: Model<NoteDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private readonly authService: AuthService,
   ) {}
+
+  async getAll() {
+    const decode = this.authService.decodeByRequest();
+    return await this.noteModel.find({ user: decode.id });
+  }
 
   async create(note: CreateNoteDto) {
     const { userId } = note;

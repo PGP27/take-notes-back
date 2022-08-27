@@ -5,6 +5,7 @@ import {
   UseGuards,
   Patch,
   Param,
+  Get,
 } from '@nestjs/common';
 import { CreateNoteDto } from './dto/CreateNoteDto';
 import { UpdateNoteDto } from './dto/UpdateNoteDto';
@@ -14,6 +15,12 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 @Controller('note')
 export class NoteController {
   constructor(private readonly noteService: NoteService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  getAll() {
+    return this.noteService.getAll();
+  }
 
   @UseGuards(JwtAuthGuard)
   @Post()
