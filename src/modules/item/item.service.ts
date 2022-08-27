@@ -8,10 +8,9 @@ import { List, ListDocument } from '../list/list.entity';
 
 @Injectable()
 export class ItemService {
-
   constructor(
     @InjectModel(Item.name) private itemModel: Model<ItemDocument>,
-    @InjectModel(List.name) private listModel: Model<ListDocument>
+    @InjectModel(List.name) private listModel: Model<ListDocument>,
   ) {}
 
   async create(item: CreateItemDto) {
@@ -22,7 +21,7 @@ export class ItemService {
     if (!listIdResult) {
       throw new HttpException(
         { message: 'Lista não encontrada' },
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -40,13 +39,13 @@ export class ItemService {
     if (!itemIdResult) {
       throw new HttpException(
         { message: 'Item não encontrado' },
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
     await this.itemModel.updateOne(
       { _id: id },
-      { $set: { text, done, updatedAt } }
+      { $set: { text, done, updatedAt } },
     );
 
     return await this.itemModel.findById(id).populate('list').populate('user');

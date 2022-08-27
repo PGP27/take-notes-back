@@ -8,7 +8,6 @@ import * as md5 from 'md5';
 
 @Injectable()
 export class UserService {
-
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async create(user: CreateUserDto) {
@@ -19,7 +18,7 @@ export class UserService {
     if (userEmailResult) {
       throw new HttpException(
         { message: 'Esse email já existe' },
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -28,7 +27,7 @@ export class UserService {
     if (userUsernameResult) {
       throw new HttpException(
         { message: 'Esse usuário já existe' },
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -46,20 +45,23 @@ export class UserService {
     const { oldUsername, oldPassword, name, email, username, password } = user;
 
     const userIdResult = await this.userModel.findById(id);
-    
+
     if (!userIdResult) {
       throw new HttpException(
         { message: 'Usuário não encontrado' },
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
-    const checkLoginResult = await this.userModel.findOne({ username: oldUsername, password: md5(oldPassword) });
+    const checkLoginResult = await this.userModel.findOne({
+      username: oldUsername,
+      password: md5(oldPassword),
+    });
 
     if (!checkLoginResult) {
       throw new HttpException(
         { message: 'Usuário ou senha inválidos' },
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -68,7 +70,7 @@ export class UserService {
     if (userEmailResult) {
       throw new HttpException(
         { message: 'Esse email já existe' },
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -77,13 +79,13 @@ export class UserService {
     if (userUsernameResult) {
       throw new HttpException(
         { message: 'Esse usuário já existe' },
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
     await this.userModel.updateOne(
       { _id: id },
-      { $set: { name, email, username, password: md5(password) } }
+      { $set: { name, email, username, password: md5(password) } },
     );
 
     const updatedUser = await this.userModel.findById(id);
@@ -92,6 +94,6 @@ export class UserService {
       name: updatedUser.name,
       email: updatedUser.email,
       username: updatedUser.username,
-    }
+    };
   }
 }

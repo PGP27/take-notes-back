@@ -6,8 +6,13 @@ import { List, ListSchema } from './list.entity';
 import { User, UserSchema } from '../user/user.entity';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: List.name, schema: ListSchema }, { name: User.name, schema: UserSchema }])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: List.name, schema: ListSchema },
+      { name: User.name, schema: UserSchema },
+    ]),
+  ],
   controllers: [ListController],
-  providers: [ListService]
+  providers: [ListService],
 })
 export class ListModule {}

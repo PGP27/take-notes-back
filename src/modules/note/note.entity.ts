@@ -16,12 +16,6 @@ export class Note {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
   @Type(() => User)
   user: User;
-
-  @Prop({ default: new Date() })
-  createdAt: Date;
-
-  @Prop()
-  updatedAt: Date | null;
 }
 
 export const NoteSchema = SchemaFactory.createForClass(Note);

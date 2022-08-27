@@ -16,12 +16,6 @@ export class Item {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: List.name })
   @Type(() => List)
   list: List;
-
-  @Prop({ default: new Date() })
-  createdAt: Date;
-
-  @Prop()
-  updatedAt: Date | null;
 }
 
 export const ItemSchema = SchemaFactory.createForClass(Item);

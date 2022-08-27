@@ -1,4 +1,11 @@
-import { Controller, Post, Body, Get, UseGuards, Patch, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Patch,
+  Param,
+} from '@nestjs/common';
 import { CreateNoteDto } from './dto/CreateNoteDto';
 import { UpdateNoteDto } from './dto/UpdateNoteDto';
 import { NoteService } from './note.service';

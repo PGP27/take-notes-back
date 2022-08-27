@@ -6,8 +6,13 @@ import { Note, NoteSchema } from './note.entity';
 import { User, UserSchema } from '../user/user.entity';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Note.name, schema: NoteSchema }, { name: User.name, schema: UserSchema }])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: Note.name, schema: NoteSchema },
+      { name: User.name, schema: UserSchema },
+    ]),
+  ],
   controllers: [NoteController],
-  providers: [NoteService]
+  providers: [NoteService],
 })
 export class NoteModule {}
