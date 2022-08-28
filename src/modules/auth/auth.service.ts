@@ -6,6 +6,7 @@ import { User, UserDocument } from '../user/user.entity';
 import { Model } from 'mongoose';
 import { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
+import { LoginRequest } from './dto/LoginRequest';
 
 class Decode {
   id: string;
@@ -58,12 +59,33 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const { id, name, email, username } = user;
-    const payload = { id, name, email, username };
+  async login(login: LoginRequest) {
+    const { username, password } = login;
+
+    const loginResult = await this.userModel.findOne({ username });
+
+    if (!loginResult) {
+      throw new HttpException(
+        { message: 'Erro na autenticação' },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    if (loginResult.password !== md5(password)) {
+      throw new HttpException(
+        { message: 'Erro na autenticação' },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
     return {
-      user,
-      token: this.jwtService.sign(payload),
+      user: loginResult,
+      token: this.jwtService.sign({
+        id: loginResult._id,
+        name: loginResult.name,
+        email: loginResult.email,
+        username: loginResult.username,
+      }),
     };
   }
 }
