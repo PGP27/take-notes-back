@@ -17,14 +17,14 @@ export class CreateUserDto {
     message: "O campo 'usuário' deve ter no mínimo 4 caracteres",
   })
   @MaxLength(20, {
-    message: "O campo 'usuário' deve ter no mínimo 20 caracteres",
+    message: "O campo 'usuário' deve ter no máximo 20 caracteres",
   })
   username: string;
 
   @IsNotEmpty({ message: "O campo 'senha' é obrigatório" })
   @MinLength(6, { message: "O campo 'senha' deve ter no mínimo 6 caracteres" })
   @MaxLength(20, {
-    message: "O campo 'senha' deve ter no mínimo 20 caracteres",
+    message: "O campo 'senha' deve ter no máximo 20 caracteres",
   })
   password: string;
 }
