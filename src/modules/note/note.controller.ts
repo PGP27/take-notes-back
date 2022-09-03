@@ -23,6 +23,12 @@ export class NoteController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  getById(@Param('id') id: string) {
+    return this.noteService.getById(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createNoteDto: CreateNoteDto) {
     return this.noteService.create(createNoteDto);

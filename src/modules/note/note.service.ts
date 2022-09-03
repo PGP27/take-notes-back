@@ -20,6 +20,10 @@ export class NoteService {
     return await this.noteModel.find({ user: decode.id });
   }
 
+  async getById(id: string) {
+    return await this.noteModel.findById(id);
+  }
+
   async create(note: CreateNoteDto) {
     const { userId } = note;
     const userIdResult = await this.userModel.findById(userId);

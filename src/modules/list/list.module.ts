@@ -4,6 +4,8 @@ import { ListService } from './list.service';
 import { ListController } from './list.controller';
 import { List, ListSchema } from './list.entity';
 import { User, UserSchema } from '../user/user.entity';
+import { JwtService } from '@nestjs/jwt';
+import { AuthService } from '../auth/auth.service';
 
 @Module({
   imports: [
@@ -13,6 +15,6 @@ import { User, UserSchema } from '../user/user.entity';
     ]),
   ],
   controllers: [ListController],
-  providers: [ListService],
+  providers: [ListService, AuthService, JwtService],
 })
 export class ListModule {}
