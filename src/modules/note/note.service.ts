@@ -56,4 +56,8 @@ export class NoteService {
 
     return await this.noteModel.findById(id).populate('user');
   }
+
+  async delete(id: string) {
+    return await this.noteModel.findOneAndDelete({ _id: id });
+  }
 }

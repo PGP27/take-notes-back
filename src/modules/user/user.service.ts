@@ -42,7 +42,7 @@ export class UserService {
   }
 
   async update(user: UpdateUserDto, id: string) {
-    const { oldUsername, oldPassword, name, email, username, password } = user;
+    const { name, email, username, oldPassword, password } = user;
 
     const userIdResult = await this.userModel.findById(id);
 
@@ -53,21 +53,9 @@ export class UserService {
       );
     }
 
-    const checkLoginResult = await this.userModel.findOne({
-      username: oldUsername,
-      password: md5(oldPassword),
-    });
-
-    if (!checkLoginResult) {
-      throw new HttpException(
-        { message: 'Usuário ou senha inválidos' },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     const userEmailResult = await this.userModel.findOne({ email });
 
-    if (userEmailResult) {
+    if (userEmailResult && userEmailResult.username !== userIdResult.username) {
       throw new HttpException(
         { message: 'Esse email já existe' },
         HttpStatus.BAD_REQUEST,
@@ -76,16 +64,36 @@ export class UserService {
 
     const userUsernameResult = await this.userModel.findOne({ username });
 
-    if (userUsernameResult) {
+    if (
+      userUsernameResult &&
+      userUsernameResult.username !== userIdResult.username
+    ) {
       throw new HttpException(
         { message: 'Esse usuário já existe' },
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    await this.userModel.updateOne(
+    if (
+      (password && !oldPassword) ||
+      (oldPassword && md5(oldPassword) !== userIdResult.password)
+    ) {
+      throw new HttpException(
+        { message: 'Senha atual incorreta' },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    await this.userModel.findByIdAndUpdate(
       { _id: id },
-      { $set: { name, email, username, password: md5(password) } },
+      {
+        $set: {
+          name,
+          email,
+          username,
+          password: password ? md5(password) : userIdResult.password,
+        },
+      },
     );
 
     const updatedUser = await this.userModel.findById(id);

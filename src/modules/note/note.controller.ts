@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Get,
+  Delete,
 } from '@nestjs/common';
 import { CreateNoteDto } from './dto/CreateNoteDto';
 import { UpdateNoteDto } from './dto/UpdateNoteDto';
@@ -38,5 +39,11 @@ export class NoteController {
   @Patch(':id')
   update(@Body() updateNoteDto: UpdateNoteDto, @Param('id') id: string) {
     return this.noteService.update(updateNoteDto, id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return this.noteService.delete(id);
   }
 }

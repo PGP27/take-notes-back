@@ -1,18 +1,6 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsOptional, MaxLength, MinLength } from 'class-validator';
 
 export class UpdateUserDto {
-  @IsNotEmpty()
-  oldUsername: string;
-
-  @IsNotEmpty()
-  oldPassword: string;
-
   @IsOptional()
   @MinLength(3, { message: "O campo 'nome' deve ter no mínimo 3 caracteres" })
   @MaxLength(100, {
@@ -32,6 +20,9 @@ export class UpdateUserDto {
     message: "O campo 'usuário' deve ter no máximo 20 caracteres",
   })
   username: string;
+
+  @IsOptional()
+  oldPassword: string;
 
   @IsOptional()
   @MinLength(6, { message: "O campo 'senha' deve ter no mínimo 6 caracteres" })
