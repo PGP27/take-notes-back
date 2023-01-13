@@ -1,8 +1,8 @@
 {
   "version": 2,
   "env": {
-    "STRING_CONNECTION": "mongo_uri",
-    "SECRET_KEY": "secret_key"
+    "STRING_CONNECTION": "@mongo_uri",
+    "SECRET_KEY": "@secret_key"
   },
   "builds": [
     {
