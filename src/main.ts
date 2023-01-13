@@ -6,7 +6,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
-    origin: ['https://take-notes-back.vercel.app'],
+    origin: '*',
+    methods: 'GET,PATCH,POST,DELETE',
   });
   await app.listen(process.env.PORT || 3000);
 }
