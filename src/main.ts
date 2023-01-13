@@ -8,6 +8,7 @@ async function bootstrap() {
   app.enableCors({
     origin: '*',
     methods: 'GET,PATCH,POST,DELETE',
+    preflightContinue: false,
   });
   await app.listen(process.env.PORT || 3000);
 }
