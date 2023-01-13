@@ -4,7 +4,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './user.entity';
-import * as md5 from 'md5';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -35,7 +35,7 @@ export class UserService {
       name,
       email,
       username,
-      password: md5(password),
+      password: bcrypt.hashSync(password, 10),
     };
 
     return await this.userModel.create(newUser);
@@ -76,7 +76,7 @@ export class UserService {
 
     if (
       (password && !oldPassword) ||
-      (oldPassword && md5(oldPassword) !== userIdResult.password)
+      (oldPassword && !bcrypt.compareSync(oldPassword, userIdResult.password))
     ) {
       throw new HttpException(
         { message: 'Senha atual incorreta' },
@@ -91,7 +91,9 @@ export class UserService {
           name,
           email,
           username,
-          password: password ? md5(password) : userIdResult.password,
+          password: password
+            ? bcrypt.hashSync(password, 10)
+            : userIdResult.password,
         },
       },
     );

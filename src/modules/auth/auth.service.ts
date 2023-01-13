@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as md5 from 'md5';
+import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../user/user.entity';
 import { Model } from 'mongoose';
@@ -46,7 +46,7 @@ export class AuthService {
   async validateUser(username: string, password: string) {
     const user = await this.userModel.findOne({ username });
 
-    if (user && md5(password) === user.password) {
+    if (user && bcrypt.compareSync(password, user.password)) {
       const { id, name, email, username } = user;
       return {
         id,
@@ -71,7 +71,7 @@ export class AuthService {
       );
     }
 
-    if (loginResult.password !== md5(password)) {
+    if (!bcrypt.compareSync(password, loginResult.password)) {
       throw new HttpException(
         { message: 'Erro na autenticação' },
         HttpStatus.UNAUTHORIZED,
