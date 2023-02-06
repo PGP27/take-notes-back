@@ -7,7 +7,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
     allowedHeaders: ['content-type'],
-    origin: 'https://take-notes-front.vercel.app/',
+    origin: '*',
     credentials: true,
   });
   await app.listen(process.env.PORT || 3000);
